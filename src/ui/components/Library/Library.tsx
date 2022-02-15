@@ -1,15 +1,12 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { connect, ConnectedProps } from "react-redux";
+import React, { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useAuth0 from "ui/utils/useAuth0";
 import LogRocket from "ui/utils/logrocket";
 import hooks from "ui/hooks";
 import * as actions from "ui/actions/app";
 import { Workspace } from "ui/types";
-import { UIState } from "ui/state";
 import * as selectors from "ui/reducers/app";
 import { Nag, useGetUserInfo } from "ui/hooks/users";
-import { removeUrlParameters } from "ui/utils/environment";
-import { setExpectedError } from "ui/actions/session";
 import LoadingScreen from "../shared/LoadingScreen";
 import Sidebar from "./Sidebar";
 import ViewerRouter from "./ViewerRouter";
@@ -19,7 +16,6 @@ import { trackEvent } from "ui/utils/telemetry";
 import {
   downloadReplay,
   firstReplay,
-  hasTeamInvitationCode,
   isTeamLeaderInvite,
   singleInvitation,
 } from "ui/utils/onboarding";
@@ -59,7 +55,7 @@ function FilterBar({
   );
 }
 
-function LibraryLoader(props: PropsFromRedux) {
+function LibraryLoader() {
   const auth = useAuth0();
   const { userSettings, loading: userSettingsLoading } = hooks.useGetUserSettings();
   const userInfo = hooks.useGetUserInfo();
@@ -77,23 +73,19 @@ function LibraryLoader(props: PropsFromRedux) {
     return <LoadingScreen />;
   }
 
-  return <Library {...{ ...props, workspaces, pendingWorkspaces, nags }} />;
+  return <Library {...{ workspaces, pendingWorkspaces, nags }} />;
 }
 
-type LibraryProps = PropsFromRedux & {
+type LibraryProps = {
   workspaces: Workspace[];
   pendingWorkspaces?: Workspace[];
   nags: Nag[];
 };
 
-function Library({
-  setWorkspaceId,
-  setModal,
-  currentWorkspaceId,
-  workspaces,
-  pendingWorkspaces,
-  nags,
-}: LibraryProps) {
+const Library: FC<LibraryProps> = ({ workspaces, pendingWorkspaces, nags }) => {
+  const dispatch = useDispatch();
+  const currentWorkspaceId = useSelector(selectors.getWorkspaceId);
+
   const router = useRouter();
   const [searchString, setSearchString] = useState("");
   const updateDefaultWorkspace = hooks.useUpdateDefaultWorkspace();
@@ -103,20 +95,20 @@ function Library({
     // After rendering null, update the workspaceId to display the user's library
     // instead of the non-existent team.
     if (![{ id: null }, ...workspaces].some(ws => ws.id === currentWorkspaceId)) {
-      setWorkspaceId(null);
+      dispatch(actions.setWorkspaceId(null));
       updateDefaultWorkspace({ variables: { workspaceId: null } });
     }
   }, []);
   useEffect(function handleOnboardingModals() {
     if (singleInvitation(pendingWorkspaces?.length || 0, workspaces.length)) {
       trackEvent("onboarding.team_invite");
-      setModal("single-invite");
+      dispatch(actions.setModal("single-invite"));
     } else if (downloadReplay(nags, dismissNag)) {
       trackEvent("onboarding.download_replay_prompt");
-      setModal("download-replay");
+      dispatch(actions.setModal("download-replay"));
     } else if (firstReplay(nags)) {
       trackEvent("onboarding.demo_replay_prompt");
-      setModal("first-replay");
+      dispatch(actions.setModal("first-replay"));
     }
   }, []);
 
@@ -147,17 +139,6 @@ function Library({
       </div>
     </main>
   );
-}
+};
 
-const connector = connect(
-  (state: UIState) => ({
-    currentWorkspaceId: selectors.getWorkspaceId(state),
-  }),
-  {
-    setWorkspaceId: actions.setWorkspaceId,
-    setModal: actions.setModal,
-    setExpectedError,
-  }
-);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-export default connector(LibraryLoader);
+export default LibraryLoader;

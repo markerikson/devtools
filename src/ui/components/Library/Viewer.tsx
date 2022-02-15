@@ -116,8 +116,23 @@ function ViewerContent({
     return order * new Date(recording.date).getTime();
   });
 
+  const recentRecordingForWorkspace: Recording[] = [];
+
   return (
     <>
+      <ViewerHeader>
+        <ViewerHeaderLeft>Recent</ViewerHeaderLeft>
+      </ViewerHeader>
+      <div className="recording-list flex flex-col overflow-y-auto rounded-md bg-white text-sm shadow-md">
+        {recentRecordingForWorkspace.map(r => (
+          <RecordingRow
+            key={r.id}
+            recording={r}
+            selected={selectedIds.includes(r.id)}
+            {...{ addSelectedId, removeSelectedId, isEditing }}
+          />
+        ))}
+      </div>
       <ViewerHeader>
         {HeaderLeft}
         <div className="flex flex-row items-center space-x-3">
@@ -130,16 +145,20 @@ function ViewerContent({
               </PrimaryButton>
             </>
           ) : (
-            <SecondaryButton className="bg-white hover:bg-primaryAccentHover hover:text-white" color="blue" onClick={() => setIsEditing(true)}>
+            <SecondaryButton
+              className="bg-white hover:bg-primaryAccentHover hover:text-white"
+              color="blue"
+              onClick={() => setIsEditing(true)}
+            >
               Edit
             </SecondaryButton>
           )}
         </div>
       </ViewerHeader>
       <div className="recording-list flex flex-col overflow-y-auto rounded-md bg-white text-sm shadow-md">
-        {sortedRecordings.map((r, i) => (
+        {sortedRecordings.map(r => (
           <RecordingRow
-            key={i}
+            key={r.id}
             recording={r}
             selected={selectedIds.includes(r.id)}
             {...{ addSelectedId, removeSelectedId, isEditing }}
