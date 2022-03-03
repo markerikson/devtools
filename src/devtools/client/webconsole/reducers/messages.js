@@ -83,6 +83,8 @@ function cloneState(state) {
  */
 // eslint-disable-next-line complexity
 function addMessage(newMessage, state, filtersState) {
+  console.log("^^^");
+  console.log(newMessage);
   if (newMessage.type === constants.MESSAGE_TYPE.NULL_MESSAGE) {
     // When the message has a NULL type, we don't add it.
     return state;

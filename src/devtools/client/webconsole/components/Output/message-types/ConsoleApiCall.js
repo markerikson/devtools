@@ -133,6 +133,8 @@ function ConsoleApiCall(props) {
 
   const collapsible = isGroupType(type) || (level === "error" && Array.isArray(stacktrace));
   const topLevelClasses = ["cm-s-mozilla"];
+
+  console.log("b", message);
   return Message({
     messageId,
     executionPoint,

@@ -103,6 +103,9 @@ function onConsoleMessage(msg) {
       }
     }
 
+    console.log("KURAC");
+    console.log(msg);
+
     const packet = {
       errorMessage: msg.text,
       errorMessageName: "ErrorMessageName",
