@@ -1,8 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"use strict";
 
-export const actionTypes = {
+const actionTypes = {
   APPEND_NOTIFICATION: "APPEND_NOTIFICATION",
   APPEND_TO_HISTORY: "APPEND_TO_HISTORY",
   AUTOCOMPLETE_CLEAR: "AUTOCOMPLETE_CLEAR",
@@ -50,9 +51,9 @@ export const actionTypes = {
   EDITOR_SET_WIDTH: "EDITOR_SET_WIDTH",
   TARGET_AVAILABLE: "TARGET_AVAILABLE",
   SET_ZOOMED_REGION: "SET_ZOOMED_REGION",
-} as const;
+};
 
-export const prefs = {
+const prefs = {
   PREFS: {
     FILTER: {
       ERROR: "filter.error",
@@ -83,9 +84,9 @@ export const prefs = {
     },
     FEATURES: {},
   },
-} as const;
+};
 
-export const FILTERS = {
+const FILTERS = {
   CSS: "css",
   DEBUG: "debug",
   ERROR: "error",
@@ -96,9 +97,9 @@ export const FILTERS = {
   TEXT: "text",
   WARN: "warn",
   NODEMODULES: "nodemodules",
-} as const;
+};
 
-export const DEFAULT_FILTERS_VALUES = {
+const DEFAULT_FILTERS_VALUES = {
   [FILTERS.TEXT]: "",
   [FILTERS.ERROR]: true,
   [FILTERS.WARN]: true,
@@ -109,75 +110,88 @@ export const DEFAULT_FILTERS_VALUES = {
   [FILTERS.NET]: false,
   [FILTERS.NETXHR]: false,
   [FILTERS.NODEMODULES]: true,
-} as const;
+};
 
-export const DEFAULT_FILTERS = (
-  Object.keys(DEFAULT_FILTERS_VALUES) as Array<keyof typeof DEFAULT_FILTERS_VALUES>
-).filter(
+const DEFAULT_FILTERS = Object.keys(DEFAULT_FILTERS_VALUES).filter(
   // We make an exception for node_modules here to keep it hidden by default
   filter => DEFAULT_FILTERS_VALUES[filter] !== false || filter == "nodemodules"
 );
 
-export const FILTERBAR_DISPLAY_MODES = {
-  NARROW: "narrow",
-  WIDE: "wide",
-} as const;
+const chromeRDPEnums = {
+  MESSAGE_SOURCE: {
+    XML: "xml",
+    CSS: "css",
+    JAVASCRIPT: "javascript",
+    NETWORK: "network",
+    CONSOLE_API: "console-api",
+    // Messages emitted by the console frontend itself (i.e. similar messages grouping
+    // header).
+    CONSOLE_FRONTEND: "console-frontend",
+    STORAGE: "storage",
+    APPCACHE: "appcache",
+    RENDERING: "rendering",
+    SECURITY: "security",
+    OTHER: "other",
+    DEPRECATION: "deprecation",
+  },
+  MESSAGE_TYPE: {
+    LOG: "log",
+    DIR: "dir",
+    TABLE: "table",
+    TRACE: "trace",
+    CLEAR: "clear",
+    START_GROUP: "startGroup",
+    START_GROUP_COLLAPSED: "startGroupCollapsed",
+    END_GROUP: "endGroup",
+    ASSERT: "assert",
+    DEBUG: "debug",
+    PROFILE: "profile",
+    PROFILE_END: "profileEnd",
+    // Undocumented in Chrome RDP, but is used for evaluation results.
+    RESULT: "result",
+    // Undocumented in Chrome RDP, but is used for input.
+    COMMAND: "command",
+    // Undocumented in Chrome RDP, but is used for messages that should not
+    // output anything (e.g. `console.time()` calls).
+    NULL_MESSAGE: "nullMessage",
+    NAVIGATION_MARKER: "navigationMarker",
+    LOG_POINT: "logPoint",
+  },
+  MESSAGE_LEVEL: {
+    LOG: "log",
+    ERROR: "error",
+    WARN: "warn",
+    DEBUG: "debug",
+    INFO: "info",
+  },
+};
 
-export const MESSAGE_SOURCE = {
-  XML: "xml",
-  CSS: "css",
-  JAVASCRIPT: "javascript",
-  NETWORK: "network",
-  CONSOLE_API: "console-api",
-  // Messages emitted by the console frontend itself (i.e. similar messages grouping
-  // header).
-  CONSOLE_FRONTEND: "console-frontend",
-  STORAGE: "storage",
-  APPCACHE: "appcache",
-  RENDERING: "rendering",
-  SECURITY: "security",
-  OTHER: "other",
-  DEPRECATION: "deprecation",
-} as const;
-export const MESSAGE_TYPE = {
-  LOG: "log",
-  DIR: "dir",
-  TABLE: "table",
-  TRACE: "trace",
-  CLEAR: "clear",
-  START_GROUP: "startGroup",
-  START_GROUP_COLLAPSED: "startGroupCollapsed",
-  END_GROUP: "endGroup",
-  ASSERT: "assert",
-  DEBUG: "debug",
-  PROFILE: "profile",
-  PROFILE_END: "profileEnd",
-  // Undocumented in Chrome RDP, but is used for evaluation results.
-  RESULT: "result",
-  // Undocumented in Chrome RDP, but is used for input.
-  COMMAND: "command",
-  // Undocumented in Chrome RDP, but is used for messages that should not
-  // output anything (e.g. `console.time()` calls).
-  NULL_MESSAGE: "nullMessage",
-  NAVIGATION_MARKER: "navigationMarker",
-  LOG_POINT: "logPoint",
-} as const;
-export const MESSAGE_LEVEL = {
-  LOG: "log",
-  ERROR: "error",
-  WARN: "warn",
-  DEBUG: "debug",
-  INFO: "info",
-} as const;
-
-export const jstermCommands = {
+const jstermCommands = {
   JSTERM_COMMANDS: {
     INSPECT: "inspectObject",
   },
-} as const;
+};
 
 // Constants used for defining the direction of JSTerm input history navigation.
-export const historyCommands = {
+const historyCommands = {
   HISTORY_BACK: -1,
   HISTORY_FORWARD: 1,
-} as const;
+};
+
+// Combine into a single constants object
+module.exports = Object.assign(
+  {
+    FILTERS,
+    DEFAULT_FILTERS,
+    DEFAULT_FILTERS_VALUES,
+    FILTERBAR_DISPLAY_MODES: {
+      NARROW: "narrow",
+      WIDE: "wide",
+    },
+  },
+  actionTypes,
+  chromeRDPEnums,
+  jstermCommands,
+  prefs,
+  historyCommands
+);

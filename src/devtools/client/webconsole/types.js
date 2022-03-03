@@ -1,10 +1,15 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"use strict";
 
-import { MESSAGE_SOURCE, MESSAGE_TYPE, MESSAGE_LEVEL } from "./constants";
+const {
+  MESSAGE_SOURCE,
+  MESSAGE_TYPE,
+  MESSAGE_LEVEL,
+} = require("devtools/client/webconsole/constants");
 
-export const ConsoleCommand = function (props: Record<PropertyKey, any>) {
+exports.ConsoleCommand = function (props) {
   return Object.assign(
     {
       id: null,
@@ -22,7 +27,7 @@ export const ConsoleCommand = function (props: Record<PropertyKey, any>) {
   );
 };
 
-export const ConsoleMessage = function (props: Record<PropertyKey, any>) {
+exports.ConsoleMessage = function (props) {
   return Object.assign(
     {
       id: null,
@@ -53,7 +58,7 @@ export const ConsoleMessage = function (props: Record<PropertyKey, any>) {
   );
 };
 
-export const PaywallMessage = function (props: Record<PropertyKey, any>) {
+exports.PaywallMessage = function (props) {
   return Object.assign(
     {
       id: null,

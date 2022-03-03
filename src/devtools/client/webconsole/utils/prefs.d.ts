@@ -13,7 +13,6 @@ export const prefs: {
   sourcesCollapsed: boolean;
   timestampMessages: boolean;
   timestampsVisible: boolean;
-  groupWarningMessages: boolean;
 };
 
 export function getPrefsService(): {
