@@ -890,8 +890,6 @@ class _ThreadFront {
       }
     });
     client.Console.addNewMessageListener(async ({ message }) => {
-      console.log("PICKA");
-      console.log(message);
       await this.ensureAllSources();
       const pause = new Pause(sessionId);
       pause.instantiate(

@@ -85,8 +85,6 @@ function getMessageComponent(message) {
     return componentMap.get("DefaultRenderer");
   }
 
-  console.log(message);
-
   switch (message.source) {
     case MESSAGE_SOURCE.CONSOLE_API:
       return message.paywall

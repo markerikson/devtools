@@ -144,8 +144,6 @@ class ConsoleOutput extends Component {
       })
       .map((messageId, i) => {
         const message = messages.get(messageId);
-        console.log("----");
-        console.log(message);
         const isPrimaryHighlighted = hoveredItem?.point === message.executionPoint;
         const shouldScrollIntoView = isPrimaryHighlighted && hoveredItem?.target !== "console";
 
