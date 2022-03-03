@@ -2,14 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-"use strict";
+export class IdGenerator {
+  messageId: number;
 
-exports.IdGenerator = class IdGenerator {
   constructor() {
     this.messageId = 1;
   }
 
-  getNextId(packet) {
+  getNextId(packet: { actor: any }) {
     return packet && packet.actor ? packet.actor : "" + this.messageId++;
   }
-};
+}

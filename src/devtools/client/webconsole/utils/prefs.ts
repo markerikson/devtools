@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-"use strict";
-
 import Services from "devtools/shared/services";
 import { PrefsHelper } from "devtools/client/shared/prefs";
 
@@ -40,10 +38,10 @@ export const prefs = new PrefsHelper("console", {
 
 export function getPrefsService() {
   return {
-    getBoolPref: (pref, deflt) => deflt,
-    getIntPref: (pref, deflt) => deflt,
-    setBoolPref: (pref, value) => {},
-    setIntPref: (pref, value) => {},
-    clearUserPref: pref => {},
+    getBoolPref: (_: any, deflt: any) => deflt,
+    getIntPref: (_: any, deflt: any) => deflt,
+    setBoolPref: (_: any) => {},
+    setIntPref: (_: any) => {},
+    clearUserPref: () => {},
   };
 }
